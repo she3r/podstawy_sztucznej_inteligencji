@@ -22,7 +22,7 @@ def game():
 
 
 # zwraca stosunek zwyciestw drugiego gracza do ilosci symulacji
-def testGame(n=100000):
+def testGame(n=1000000):
     count1 = 0
     count2 = 0
     for i in range(n):
@@ -32,7 +32,8 @@ def testGame(n=100000):
         elif result == -1:
             count2 += 1
 
-    return count1 / n, count2 / n, abs(n - count1 - count2) / n
+    return {'wieksza dla sumy 100': count1 / n, 'wieksza dla sumy 200': count2 / n,
+            'remis': abs(n - count1 - count2) / n}
 
 
 print(testGame())

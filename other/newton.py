@@ -1,40 +1,25 @@
-def f(x):
-    return x ** 3 + x + 1
+import numpy as np
 
 
-def fprime(x):
-    return 3 * x ** 2 + 1
+def newton(f, Df, x0, epsilon, max_iter):
+    xn = x0
+    for n in range(0, max_iter):
+        fxn = f(*xn)
+        if abs(np.sum(fxn)) < epsilon:
+            print(f'sum = {np.sum(fxn)}, {fxn}')
+            return xn
+        Dfxn = Df(*xn)
+        zn = np.linalg.solve(np.array(Dfxn), -np.array(fxn))
+        xn = xn + zn
+        print(f"wartosc po {1 + n} iteracji: {xn}")
 
 
-def sgn(x):
-    return x >= 0
+x0 = (0, 1)
+f = lambda x, y: [[4 * x ** 2 - y ** 2 - 1], [4 * x * y ** 2 - x - 3]]
+Df = lambda x, y: [[8 * x, 2 * y], [4 * y ** 2 - 1, 8 * x * y]]
 
+# x0 = -1
+# f = lambda x: 4*x**3 - 2*x**2 - 2
+# Df = lambda x: 12*x**2 -4*x
 
-a = -2
-b = 2
-e = b - a
-delta = 0.00000001
-eps1 = 0.000001
-M = 100
-fa = f(a)
-fb = f(b)
-ya = None
-yb = None
-x = a - f(a) / fprime(a)
-for i in range(M):
-    ya = f(a)
-    yb = f(b)
-    x = x - f(x) / fprime(x)
-    y = f(x)
-    if abs(y) < eps1 or abs(x - a) < delta or abs(x - b) < delta:
-        print(f" (c,f(c)) = {x, f(x)}")
-        break
-    else:
-        if ya * y > 0:
-            a = x
-            ya = y
-        else:
-            b = x
-            yb = y
-    if i == M - 1:
-        print(f" (c,f(c)) = {x, f(x)} - dla przedzialu {a, b}")
+print(newton(f, Df, x0, 0.00000000000001, 100))
